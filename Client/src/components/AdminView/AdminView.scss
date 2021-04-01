@@ -1,0 +1,108 @@
+.AdminHeader {
+  background-color: #000;
+  height: 5vh;
+  width: 100vw;
+  position: absolute;
+  top: 0;
+  color: #fff;
+}
+
+.AdminBody {
+  overflow: auto;
+  height: 90vh;
+  width: 100vw;
+  position: absolute;
+  top: 5vh;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+}
+
+.Paper {
+  /* margin: 20px; */
+  margin: 5px 0;
+  padding: 10px;
+  text-align: center;
+  width: 90vw;
+
+  
+}
+
+.CeremoniesPaper {
+  height: 30vh;
+}
+
+.TablePaper {
+  height: 51vh;
+}
+
+.CeremoniesGridListRoot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+.CeremoniesGridList {
+  flex-wrap: nowrap !important;
+  transform: translateZ(0);
+}
+
+.CeremoniesTitleBar {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.3) 70%,
+    rgba(0, 0, 0, 0) 100%
+  ) !important;
+}
+
+.CeremoniesTitle {
+  color: blue;
+}
+
+.ReservationsTable {
+}
+
+.AdminFooter {
+  background-color: #000;
+  width: 100vw;
+  height: 5vh;
+  position: absolute;
+  bottom: 0;
+  color: #fff;
+}
+
+.Fab {
+  position: absolute !important;
+  top: 12px;
+  right: 20px;
+  background-color: #000 !important;
+  color: #fff !important;
+  z-index: 999 !important;
+  
+  &:hover {
+    background-color: #393939 !important;
+  }
+}
+
+.CeremonyDialog{
+  
+}
+
+.Form{
+  display: flex ;
+  flex-direction: column;
+  height: 50vh;
+  max-width: 25vw;
+  min-width: 400px;
+  justify-content: space-evenly;
+  
+  .CheckBoxes{
+    display: flex ;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}

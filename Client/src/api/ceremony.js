@@ -1,8 +1,8 @@
 import { API } from "./api";
 
-export const getReservations = async () => {
+export const getCeremonies = async () => {
   try {
-    const response = await API.get(`/reservation`);
+    const response = await API.get(`/ceremony`);
     return response;
   } catch (error) {
     console.log(error);
@@ -10,9 +10,9 @@ export const getReservations = async () => {
   }
 };
 
-export const addReservation = async (reservation) => {
+export const addCeremony = async (ceremony) => {
   try {
-    const response = await API.post(`/reservation`, reservation);
+    const response = await API.post(`/ceremony`, ceremony);
     return response;
   } catch (error) {
     console.log(error);
