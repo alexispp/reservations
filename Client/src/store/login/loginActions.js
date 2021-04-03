@@ -120,7 +120,7 @@ export const signOut = function (history) {
   return (dispatch) => {
     dispatch(signOutRequest());
     localStorage.clear();
-    history.push("/signin");
+    history.push("/");
     if (localStorage.getItem("USER_TOKEN")) {
       dispatch(signOutFailure());
     } else {

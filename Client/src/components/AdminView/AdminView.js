@@ -1,12 +1,12 @@
 import moment from "moment";
 import React, { useState, useCallback, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 import {
   Paper,
-  Grid,
   GridList,
   GridListTile,
-  GridListTileBar,
   Table,
   TableBody,
   TableCell,
@@ -26,29 +26,23 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
-  FormHelperText,
-  Typography
+  Typography,
 } from "@material-ui/core";
 
 import MomentUtils from "@date-io/moment";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-  DatePicker,
-  TimePicker,
-  DateTimePicker,
-} from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
 
-import { Field, Form, Formik, FormikProps, FieldArray } from "formik";
+import { Form, Formik, FieldArray } from "formik";
 
 import AddIcon from "@material-ui/icons/Add";
 
 import "./AdminView.scss";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 
 import * as ceremonyApi from "../../api/ceremony";
 import * as reservationApi from "../../api/reservation";
+
+import { signOut } from "../../store/login/loginActions";
 
 const NewCeremonyDialog = ({ open, handleClose }) => {
   const ceremonyTimes = [
@@ -179,7 +173,9 @@ const NewCeremonyDialog = ({ open, handleClose }) => {
   );
 };
 
-const AdminView = (props) => {
+const AdminView = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [openNewReservation, setOpenNewReservation] = useState(false);
@@ -199,14 +195,13 @@ const AdminView = (props) => {
     (async () => {
       const resultCeremonies = await getCeremonies();
       setCeremonies(resultCeremonies.data);
-
     })();
   }, []);
-  
-  const onClickCeremony = async (id)=>{
-  const resultReservations = await getReservations(id);
-  setReservations(resultReservations.data);
-}
+
+  const onClickCeremony = async (id) => {
+    const resultReservations = await getReservations(id);
+    setReservations(resultReservations.data);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -237,7 +232,23 @@ const AdminView = (props) => {
 
   return (
     <>
-      <div className="AdminHeader"></div>
+      <div className="AdminHeader">
+        <div className="AdminHeaderPanel">
+          <span>Ceremonias PL - Panel de Administración</span>
+
+          <div>
+            {/* <p>Usuario: Admin</p> */}
+
+            <span
+              onClick={() => {
+                dispatch(signOut(history));
+              }}
+            >
+              Cerrar Sesión
+            </span>
+          </div>
+        </div>
+      </div>
       <div className="AdminBody">
         <Paper className="Paper CeremoniesPaper">
           <Fab
@@ -250,36 +261,35 @@ const AdminView = (props) => {
           </Fab>
           <div className="CeremoniesGridListRoot">
             {ceremonies && (
-              <GridList className="CeremoniesGridList" >
+              <GridList className="CeremoniesGridList">
                 {ceremonies.map((ceremony, index) => {
                   return (
                     <GridListTile key={index}>
-                      {/* <div
-                        style={{
-                          width: "800px",
-                          height: "100%",
-                          backgroundColor: "pink",
-                        }}
-                      ></div> */}
                       <Paper
                         className="PaperCeremony"
-                        onClick={()=>{onClickCeremony(ceremony.id)}}
+                        onClick={() => {
+                          onClickCeremony(ceremony.id);
+                        }}
                       >
                         <div className="PaperCeremonyData">
                           <Typography variant="h5">{ceremony.name}</Typography>
-                          <Typography variant="h6">{moment(ceremony.date).format("DD/MM/YYYY")}</Typography>
-                          <div>Cantidad de Asistentes: {ceremony.numberOfAssistants}</div>
-                          <div>Horarios: {JSON.stringify(ceremony.timeOptions).replaceAll('"', '').replaceAll('\\', '').replace('[', '').replace(']', '')}</div>
-                          <div>Horarios: adasdsa,d adasdasd, asdasdasd, asdasdasd, asdsadad,a sdasdasda,s dadssa</div>
+                          <Typography variant="h6">
+                            {moment(ceremony.date).format("DD/MM/YYYY")}
+                          </Typography>
+                          <div>
+                            Cantidad de Asistentes:{" "}
+                            {ceremony.numberOfAssistants}
+                          </div>
+                          <div>
+                            Horarios:{" "}
+                            {JSON.stringify(ceremony.timeOptions)
+                              .replaceAll('"', "")
+                              .replaceAll("\\", "")
+                              .replace("[", "")
+                              .replace("]", "")}
+                          </div>
                         </div>
                       </Paper>
-                      {/* <GridListTileBar
-                        title={ceremony.name}
-                        classes={{
-                          root: "CeremoniesTitleBar",
-                          title: "CeremoniesTitle",
-                        }}
-                      ></GridListTileBar> */}
                     </GridListTile>
                   );
                 })}
@@ -314,7 +324,7 @@ const AdminView = (props) => {
                         {row.name}
                       </StyledTableCell>
                       <StyledTableCell align="right">
-                        {row.date}
+                        {row.time}
                       </StyledTableCell>
                     </StyledTableRow>
                   ))}

@@ -5,6 +5,34 @@
   position: absolute;
   top: 0;
   color: #fff;
+
+  .AdminHeaderPanel{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    margin: 0 10px;
+    
+    div{
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      width: 40vw;
+
+      p{
+        margin-right: 30px;
+      }
+      span{
+        &:hover{
+          cursor: pointer;
+          text-decoration: underline;
+          color: #C7E8FF
+        }
+      }
+    }
+  }
 }
 
 .AdminBody {
@@ -43,7 +71,8 @@
   margin: 1px 3px;
 
   &:hover{
-    background-color: red;
+    background-color: #E5E5E5;
+    cursor: pointer;
   }
 }  
 
