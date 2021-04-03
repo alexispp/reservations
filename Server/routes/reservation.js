@@ -6,7 +6,7 @@ router.get("/", async (req, res) => {
   try {
     const result = await db.Reservation.findAll();
 
-    res.send().json(result);
+    res.json(result);
   } catch (error) {
     console.log(error);
     res.status(500).send("error! see the logs");
@@ -34,9 +34,13 @@ router.post("/", async (req, res) => {
 
 router.post("/getAllByCeremony", async (req, res) => {
   try {
-    const result = await db.Reservation.findAll();
+    const result = await db.Reservation.findAll(
+      {where: {CeremonyId: req.body.ceremonyId}}
+    );
 
-    res.send().json(result);
+    console.log(result)
+
+    res.json(result);
   } catch (error) {
     console.log(error);
     res.status(500).send("error! see the logs");

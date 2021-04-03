@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.belongsTo(models.Ceremony);
+
     }
   }
   Reservation.init(
@@ -22,5 +24,7 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Reservation",
     }
   );
+
+
   return Reservation;
 };
