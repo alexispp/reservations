@@ -26,12 +26,36 @@
   text-align: center;
   width: 90vw;
 
-  
 }
 
 .CeremoniesPaper {
-  height: 30vh;
+  // height: 30vh !important;
 }
+
+.MuiGridListTile-root{
+  height: 100% !important;
+}
+
+.PaperCeremony{
+  position: relative;
+  padding: 20px;
+  width: 300px;
+  margin: 1px 3px;
+
+  &:hover{
+    background-color: red;
+  }
+}  
+
+.PaperCeremonyData{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+
 
 .TablePaper {
   height: 51vh;
@@ -40,12 +64,14 @@
 .CeremoniesGridListRoot {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
+  justify-content: flex-start;
+  align-items: center;
   overflow: hidden;
-  width: 100%;
-  height: 100%;
+  // width: 100%;
+  // height: 100% !important ;
 }
 .CeremoniesGridList {
+  display: flex;
   flex-wrap: nowrap !important;
   transform: translateZ(0);
 }

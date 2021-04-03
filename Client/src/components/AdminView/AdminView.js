@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { useState, useCallback, useEffect } from "react";
 
 import {
@@ -26,6 +27,7 @@ import {
   FormControlLabel,
   Checkbox,
   FormHelperText,
+  Typography
 } from "@material-ui/core";
 
 import MomentUtils from "@date-io/moment";
@@ -73,6 +75,7 @@ const NewCeremonyDialog = ({ open, handleClose }) => {
         }}
         onSubmit={(values, actions) => {
           ceremonyApi.addCeremony(values);
+          handleClose();
         }}
       >
         {(props) => (
@@ -185,20 +188,25 @@ const AdminView = (props) => {
 
   const getCeremonies = useCallback(async () => {
     const cer = await ceremonyApi.getCeremonies();
-    console.log(cer);
     return cer;
   }, []);
   const getReservations = useCallback(
-    async () => await reservationApi.getReservations(),
+    async (id) => await reservationApi.getReservations(id),
     []
   );
 
   useEffect(() => {
-    const resultCeremonies = getCeremonies();
-    setCeremonies(resultCeremonies.data);
-    const resultReservations = getReservations();
-    setReservations(resultReservations.data);
+    (async () => {
+      const resultCeremonies = await getCeremonies();
+      setCeremonies(resultCeremonies.data);
+
+    })();
   }, []);
+  
+  const onClickCeremony = async (id)=>{
+  const resultReservations = await getReservations(id);
+  setReservations(resultReservations.data);
+}
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -241,27 +249,42 @@ const AdminView = (props) => {
             <AddIcon />
           </Fab>
           <div className="CeremoniesGridListRoot">
-            <GridList className="CeremoniesGridList" cols={2.5}>
-              {ceremonies &&
-                ceremonies.map((ceremony, index) => (
-                  <GridListTile key={index}>
-                    <div
-                      style={{
-                        width: "800px",
-                        height: "100%",
-                        backgroundColor: "pink",
-                      }}
-                    ></div>
-                    <GridListTileBar
-                      title={ceremony.name}
-                      classes={{
-                        root: "CeremoniesTitleBar",
-                        title: "CeremoniesTitle",
-                      }}
-                    ></GridListTileBar>
-                  </GridListTile>
-                ))}
-            </GridList>
+            {ceremonies && (
+              <GridList className="CeremoniesGridList" >
+                {ceremonies.map((ceremony, index) => {
+                  return (
+                    <GridListTile key={index}>
+                      {/* <div
+                        style={{
+                          width: "800px",
+                          height: "100%",
+                          backgroundColor: "pink",
+                        }}
+                      ></div> */}
+                      <Paper
+                        className="PaperCeremony"
+                        onClick={()=>{onClickCeremony(ceremony.id)}}
+                      >
+                        <div className="PaperCeremonyData">
+                          <Typography variant="h5">{ceremony.name}</Typography>
+                          <Typography variant="h6">{moment(ceremony.date).format("DD/MM/YYYY")}</Typography>
+                          <div>Cantidad de Asistentes: {ceremony.numberOfAssistants}</div>
+                          <div>Horarios: {JSON.stringify(ceremony.timeOptions).replaceAll('"', '').replaceAll('\\', '').replace('[', '').replace(']', '')}</div>
+                          <div>Horarios: adasdsa,d adasdasd, asdasdasd, asdasdasd, asdsadad,a sdasdasda,s dadssa</div>
+                        </div>
+                      </Paper>
+                      {/* <GridListTileBar
+                        title={ceremony.name}
+                        classes={{
+                          root: "CeremoniesTitleBar",
+                          title: "CeremoniesTitle",
+                        }}
+                      ></GridListTileBar> */}
+                    </GridListTile>
+                  );
+                })}
+              </GridList>
+            )}
           </div>
         </Paper>
         <Paper className="Paper TablePaper">

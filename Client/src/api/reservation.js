@@ -1,8 +1,8 @@
 import { API } from "./api";
 
-export const getReservations = async () => {
+export const getReservations = async (ceremonyId) => {
   try {
-    const response = await API.get(`/reservation`);
+    const response = await API.post(`/reservation`, ceremonyId);
     return response;
   } catch (error) {
     console.log(error);

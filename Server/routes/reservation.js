@@ -32,4 +32,16 @@ router.post("/", async (req, res) => {
   }
 });
 
+router.post("/getAllByCeremony", async (req, res) => {
+  try {
+    const result = await db.Reservation.findAll();
+
+    res.send().json(result);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("error! see the logs");
+  }
+});
+
+
 module.exports = router;
