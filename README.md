@@ -9,3 +9,4 @@ docker ps -a para ver el puerto
 
 npx sequelize-cli model:generate --name Reservation --attributes name:string,time:string,createdAt:date
 npx sequelize-cli model:generate --name User --attributes username:string,password:string,email:string
+npx sequelize-cli model:generate --name Ceremony --attributes name:string,date:date,numberOfAssistants:integer,timeOptions:string
