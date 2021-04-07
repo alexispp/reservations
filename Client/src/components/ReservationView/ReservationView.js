@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 
 import {
   Typography,
@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
-
+import moment from 'moment'
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { signIn } from "../../store/login/loginActions";
@@ -21,6 +21,9 @@ import { signIn } from "../../store/login/loginActions";
 import { withStyles } from "@material-ui/core/styles";
 
 import { addReservation } from "../../api/reservation";
+import "./ReservationView.scss";
+
+import * as ceremonyApi from "../../api/ceremony";
 
 const ColorButton = withStyles((theme) => ({
   root: {
@@ -149,6 +152,19 @@ const ReservationView = (props) => {
   const [name, setName] = useState("");
   const [time, setTime] = useState("");
   const [reservationSaved, setReservationSaved] = useState(false);
+  const [ceremony, setCeremony] = useState("");
+
+  const getLastCeremony = useCallback(async () => {
+    const cer = await ceremonyApi.getLastCeremony();
+    return cer;
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      const lastCeremony = await getLastCeremony();
+      setCeremony(lastCeremony.data);
+    })();
+  }, []);
 
   const Alert = (props) => {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -183,6 +199,8 @@ const ReservationView = (props) => {
       Learn React
     </a>
   </header> */}
+        <Typography className="CeremonyName" variant="h1">{ceremony.name}</Typography>
+
         <div className="App-body">
           {addName ? (
             <Box className="NameContainer">
@@ -205,7 +223,8 @@ const ReservationView = (props) => {
                       await addReservation({
                         name: name,
                         time: time,
-                        timeStamp: new Date(Date.now()).toLocaleDateString(),
+                        timeStamp: moment(),
+                        ceremony: ceremony.id
                       });
                       setReservationSaved(true);
                     } catch (error) {
@@ -228,7 +247,7 @@ const ReservationView = (props) => {
           ) : (
             <>
               <Typography variant="h3">
-                ¿En que horario usted desea participar de la Ceremonia?
+                ¿En que horario usted desea participar?
               </Typography>
               <Box className="Buttons">
                 <ColorButton

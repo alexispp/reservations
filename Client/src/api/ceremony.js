@@ -19,3 +19,14 @@ export const addCeremony = async (ceremony) => {
     return "";
   }
 };
+
+
+export const getLastCeremony = async ()=>{
+  try {
+    const response = await API.get(`/ceremony/lastCeremony`);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return "";
+  }
+}

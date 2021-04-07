@@ -19,11 +19,13 @@ router.post("/", async (req, res) => {
   if (!req.body.name || !req.body.time || !req.body.timeStamp)
     res.status(500).send("all fields are mandayory");
 
+
   try {
     await db.Reservation.create({
       name: req.body.name,
       time: req.body.time,
       timeStamp: req.body.timeStamp,
+      CeremonyId: req.body.ceremony,
     });
     res.send("Ok");
   } catch (error) {
@@ -34,11 +36,11 @@ router.post("/", async (req, res) => {
 
 router.post("/getAllByCeremony", async (req, res) => {
   try {
-    const result = await db.Reservation.findAll(
-      {where: {CeremonyId: req.body.ceremonyId}}
-    );
+    const result = await db.Reservation.findAll({
+      where: { CeremonyId: req.body.ceremonyId },
+    });
 
-    console.log(result)
+    console.log(result);
 
     res.json(result);
   } catch (error) {
@@ -46,6 +48,7 @@ router.post("/getAllByCeremony", async (req, res) => {
     res.status(500).send("error! see the logs");
   }
 });
+
 
 
 module.exports = router;
