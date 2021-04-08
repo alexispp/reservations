@@ -19,7 +19,6 @@ router.post("/", async (req, res) => {
   if (!req.body.name || !req.body.time || !req.body.timeStamp)
     res.status(500).send("all fields are mandayory");
 
-
   try {
     await db.Reservation.create({
       name: req.body.name,
@@ -27,7 +26,7 @@ router.post("/", async (req, res) => {
       timeStamp: req.body.timeStamp,
       CeremonyId: req.body.ceremony,
     });
-    res.send("Ok");
+    res.status(201);
   } catch (error) {
     console.log(error);
     res.status(500).send("error! see the logs");
@@ -39,9 +38,6 @@ router.post("/getAllByCeremony", async (req, res) => {
     const result = await db.Reservation.findAll({
       where: { CeremonyId: req.body.ceremonyId },
     });
-
-    console.log(result);
-
     res.json(result);
   } catch (error) {
     console.log(error);

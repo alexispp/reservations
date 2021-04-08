@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from "@material-ui/core";
 import MuiAlert from "@material-ui/lab/Alert";
-import moment from 'moment'
+import moment from "moment";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { signIn } from "../../store/login/loginActions";
@@ -153,11 +153,19 @@ const ReservationView = (props) => {
   const [time, setTime] = useState("");
   const [reservationSaved, setReservationSaved] = useState(false);
   const [ceremony, setCeremony] = useState("");
+  const [availableTimes, setAvailableTimes] = useState([]);
 
   const getLastCeremony = useCallback(async () => {
     const cer = await ceremonyApi.getLastCeremony();
     return cer;
   }, []);
+
+  const getAvailableTimes = useCallback(async () => {
+    const times = ceremony
+      ? await ceremonyApi.getAvailableTimes(ceremony.id)
+      : [];
+    return times;
+  }, [ceremony]);
 
   useEffect(() => {
     (async () => {
@@ -165,6 +173,13 @@ const ReservationView = (props) => {
       setCeremony(lastCeremony.data);
     })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      const availableTimes = await getAvailableTimes();
+      setAvailableTimes(availableTimes.data);
+    })();
+  }, [ceremony]);
 
   const Alert = (props) => {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -199,7 +214,9 @@ const ReservationView = (props) => {
       Learn React
     </a>
   </header> */}
-        <Typography className="CeremonyName" variant="h1">{ceremony.name}</Typography>
+        <Typography className="CeremonyName" variant="h1">
+          {ceremony.name}
+        </Typography>
 
         <div className="App-body">
           {addName ? (
@@ -224,7 +241,7 @@ const ReservationView = (props) => {
                         name: name,
                         time: time,
                         timeStamp: moment(),
-                        ceremony: ceremony.id
+                        ceremony: ceremony.id,
                       });
                       setReservationSaved(true);
                     } catch (error) {
@@ -246,46 +263,34 @@ const ReservationView = (props) => {
             </Box>
           ) : (
             <>
-              <Typography variant="h3">
-                ¿En que horario usted desea participar?
-              </Typography>
-              <Box className="Buttons">
-                <ColorButton
-                  onClick={() => {
-                    timeSelected("09:00hs");
-                  }}
-                >
-                  09:00hs
-                </ColorButton>
-                <ColorButton
-                  onClick={() => {
-                    timeSelected("11:00hs");
-                  }}
-                >
-                  11:00hs
-                </ColorButton>
-                <ColorButton
-                  onClick={() => {
-                    timeSelected("15:00hs");
-                  }}
-                >
-                  15:00hs
-                </ColorButton>
-                <ColorButton
-                  onClick={() => {
-                    timeSelected("17:00hs");
-                  }}
-                >
-                  17:00hs
-                </ColorButton>
-                <ColorButton
-                  onClick={() => {
-                    timeSelected("19:00hs");
-                  }}
-                >
-                  19:00hs
-                </ColorButton>
-              </Box>
+              {availableTimes &&
+                availableTimes.message &&
+                availableTimes.message
+                  .split(".")
+                  .map((element) => (
+                    <Typography variant="h3">{element}</Typography>
+                  ))}
+
+              {availableTimes && !availableTimes.message && (
+                <Typography>
+                  <Typography variant="h3">
+                    ¿En que horario usted desea participar?
+                  </Typography>
+                  <Box className="Buttons">
+                    {availableTimes.map((element, index) => (
+                      <ColorButton
+                        key={index}
+                        disabled={!element.available}
+                        onClick={() => {
+                          timeSelected(element.time);
+                        }}
+                      >
+                        {element.time}
+                      </ColorButton>
+                    ))}
+                  </Box>
+                </Typography>
+              )}
             </>
           )}
         </div>

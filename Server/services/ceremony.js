@@ -42,14 +42,24 @@ const getAvailableTimesById = async (payload) => {
     return acc;
   }, {});
 
-  return JSON.parse(ceremony.timeOptions).map((curr) => {
-    const obj = {};
-    obj[curr] =
-      timeRepetitions[curr] !== undefined
-        ? timeRepetitions[curr] < ceremony.numberOfAssistants
-        : true;
+  const objResponse = JSON.parse(ceremony.timeOptions).map((curr) => {
+    a = +1;
+    const obj = {
+      time: curr,
+      available:
+        timeRepetitions[curr] !== undefined
+          ? timeRepetitions[curr] < ceremony.numberOfAssistants
+          : true,
+    };
     return obj;
   });
+
+  const isThereOneAvailableTime = objResponse.reduce((acc, curr) => {
+    return acc || curr.available;
+  }, false);
+
+  // return objResponse;
+  return isThereOneAvailableTime ? objResponse : undefined;
 };
 
 module.exports = {

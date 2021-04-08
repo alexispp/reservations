@@ -25,7 +25,7 @@ const saveCeremony = async (req, res) => {
 
   try {
     await CeremonyServices.saveCeremony(payload);
-    res.status(200);
+    res.status(201);
   } catch (error) {
     console.log(error);
     res.status(500).send("error! see the logs");
@@ -44,12 +44,26 @@ const getLastCeremony = async (_, res) => {
 
 const getAvailableTimesById = async (req, res) => {
   try {
-    const response = await CeremonyServices.getAvailableTimesById(req.params.id);
-    res.status(200).json(response);
+    const response = await CeremonyServices.getAvailableTimesById(
+      req.params.id
+    );
+    if (response) res.status(200).json(response);
+    else
+      res
+        .status(202)
+        .json({
+          message:
+            "La ceremonia tiene cupo completo en todos los horarios.\nPara más información, comuniquese con el reverendo Marcos.",
+        });
   } catch (error) {
     console.log(error);
     res.status(500).send("error! see the logs");
   }
 };
 
-module.exports = { saveCeremony, getCeremonies, getLastCeremony, getAvailableTimesById };
+module.exports = {
+  saveCeremony,
+  getCeremonies,
+  getLastCeremony,
+  getAvailableTimesById,
+};

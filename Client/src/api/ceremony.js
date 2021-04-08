@@ -30,3 +30,15 @@ export const getLastCeremony = async ()=>{
     return "";
   }
 }
+
+export const getAvailableTimes = async(id)=>{
+  try {
+    console.log(`/ceremony/${id}/availableTimes`)
+    const response = await API.get(`/ceremony/${id}/availableTimes`);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return "";
+  }
+
+}
