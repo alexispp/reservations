@@ -16,3 +16,26 @@
 
   }
 }
+
+
+.MuiAlert-message{
+  font-size: 30px;
+}
+.MuiSvgIcon-root{
+  width: 2em !important;
+  height: 2em !important;
+}
+
+
+@media (max-width: 850px) {
+  
+  .MuiAlert-message{
+    font-size: 20px;
+  }
+  .MuiSvgIcon-root{
+    display: block;
+    width: 1.5em !important;
+    height: 1.5em !important;
+  }
+
+}

@@ -44,7 +44,7 @@ const ColorButton = withStyles((theme) => ({
       paddingBlock: 15,
       paddingInline: 30,
       margin: 15,
-      width:'100%'
+      width: "100%",
     },
   },
 }))(Button);
@@ -160,6 +160,7 @@ const ReservationView = (props) => {
   const [reservationSaved, setReservationSaved] = useState(false);
   const [ceremony, setCeremony] = useState("");
   const [availableTimes, setAvailableTimes] = useState([]);
+  const [saveResponse, setSaveResponse] = useState({});
 
   const getLastCeremony = useCallback(async () => {
     const cer = await ceremonyApi.getLastCeremony();
@@ -203,6 +204,31 @@ const ReservationView = (props) => {
 
     setReservationSaved(false);
   };
+
+  const confirmReservation = async () => {
+    try {
+      const result = await addReservation({
+        name: name,
+        time: time,
+        timeStamp: moment(),
+        ceremony: ceremony.id,
+      });
+
+      if (result.data.type === "success")
+        setTimeout(function () {
+          window.location.reload();
+        }, 2000);
+
+      setSaveResponse({
+        message: result.data.message,
+        severity: result.data.type,
+      });
+      setReservationSaved(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <>
       <div className="Reservations">
@@ -225,7 +251,6 @@ const ReservationView = (props) => {
                 }}
               />
               <Box className="NameButtons">
-                
                 <Button
                   variant="contained"
                   onClick={() => {
@@ -237,19 +262,7 @@ const ReservationView = (props) => {
                 <Button
                   variant="contained"
                   className="Confirm"
-                  onClick={async () => {
-                    try {
-                      await addReservation({
-                        name: name,
-                        time: time,
-                        timeStamp: moment(),
-                        ceremony: ceremony.id,
-                      });
-                      setReservationSaved(true);
-                    } catch (error) {
-                      console.log(error);
-                    }
-                  }}
+                  onClick={confirmReservation}
                 >
                   Confirmar
                 </Button>
@@ -312,12 +325,13 @@ const ReservationView = (props) => {
       />
 
       <Snackbar
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
         open={reservationSaved}
-        autoHideDuration={6000}
+        autoHideDuration={3000}
         onClose={handleClose}
       >
-        <Alert onClose={handleClose} severity="success">
-          This is a success message!
+        <Alert onClose={handleClose} severity={saveResponse.severity}>
+          {saveResponse.message}
         </Alert>
       </Snackbar>
     </>
