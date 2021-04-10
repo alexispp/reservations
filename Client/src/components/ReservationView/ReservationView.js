@@ -40,6 +40,12 @@ const ColorButton = withStyles((theme) => ({
     fontWeight: 600,
     backdropFilter: "blur(2px)",
     backgroundColor: "rgba(255, 255, 255, 0.2)",
+    "@media (max-width: 850px)": {
+      paddingBlock: 15,
+      paddingInline: 30,
+      margin: 15,
+      width:'100%'
+    },
   },
 }))(Button);
 
@@ -199,26 +205,12 @@ const ReservationView = (props) => {
   };
   return (
     <>
-      <div className="App">
-        {/* <header className="App-header">
-    <img src={logo} className="App-logo" alt="logo" />
-    <p>
-      Edit <code>src/App.js</code> and save to reload.
-    </p>
-    <a
-      className="App-link"
-      href="https://reactjs.org"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Learn React
-    </a>
-  </header> */}
+      <div className="Reservations">
         <Typography className="CeremonyName" variant="h1">
           {ceremony.name}
         </Typography>
 
-        <div className="App-body">
+        <div className="TimeBox">
           {addName ? (
             <Box className="NameContainer">
               <Typography variant="h3">
@@ -233,8 +225,18 @@ const ReservationView = (props) => {
                 }}
               />
               <Box className="NameButtons">
+                
                 <Button
                   variant="contained"
+                  onClick={() => {
+                    setAddName(false);
+                  }}
+                >
+                  Atras
+                </Button>
+                <Button
+                  variant="contained"
+                  className="Confirm"
                   onClick={async () => {
                     try {
                       await addReservation({
@@ -251,14 +253,6 @@ const ReservationView = (props) => {
                 >
                   Confirmar
                 </Button>
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    setAddName(false);
-                  }}
-                >
-                  Atras
-                </Button>
               </Box>
             </Box>
           ) : (
@@ -272,7 +266,7 @@ const ReservationView = (props) => {
                   ))}
 
               {availableTimes && !availableTimes.message && (
-                <Typography>
+                <div className="TimeContainer">
                   <Typography variant="h3">
                     ¿En que horario usted desea participar?
                   </Typography>
@@ -289,7 +283,7 @@ const ReservationView = (props) => {
                       </ColorButton>
                     ))}
                   </Box>
-                </Typography>
+                </div>
               )}
             </>
           )}
