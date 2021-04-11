@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
-    "migrate": "npx sequelize-cli db:migrate"
+    "migrate": "npx sequelize-cli db:migrate",
+    "heroku-migrate": "heroku run sequelize db:migrate --env production --app pl-reservations-ceremony"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
