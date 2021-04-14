@@ -9,22 +9,22 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
 
-    // await queryInterface.sequelize.query(
-    //   'ALTER TABLE "Reservations" ADD CONSTRAINT "ceremony_id_fkey" FOREIGN KEY ("CeremonyId") REFERENCES "Ceremonies" (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE;'
-    // );
+    await queryInterface.sequelize.query(
+      'ALTER TABLE "Reservations" ADD CONSTRAINT "ceremony_id_fkey" FOREIGN KEY ("CeremonyId") REFERENCES "Ceremonies" (id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE;'
+    );
 
      await queryInterface.addColumn(
       "Reservations", // name of Source model
-      "'CeremonyId'", // name of the key we're adding
+      "CeremonyId", // name of the key we're adding
       {
         type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: 'Ceremonies', // name of Target model
-          key: 'id', // key in Target model that we're referencing
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'SET NULL',
+        allowNull: true,
+        // references: {
+        //   model: 'Ceremony', // name of Target model
+        //   key: 'id', // key in Target model that we're referencing
+        // },
+        // onUpdate: 'CASCADE',
+        // onDelete: 'SET NULL',
       }
     );
   },
