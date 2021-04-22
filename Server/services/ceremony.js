@@ -3,7 +3,7 @@ const { Op, col, fn } = require("sequelize");
 const moment = require("moment");
 
 const saveCeremony = async (payload) => {
-  const newCeremony = new db.Ceremony({
+  const newCeremony = new db.ceremony({
     name: payload.name,
     date: payload.date,
     numberOfAssistants: payload.numberOfAssistants,
@@ -14,14 +14,14 @@ const saveCeremony = async (payload) => {
 };
 
 const getCeremonies = async () => {
-  return await db.Ceremony.findAll();
+  return await db.ceremony.findAll();
 };
 
 const getLastCeremony = async () => {
-  const lastCeremony = db.Ceremony.findOne({
+  const lastCeremony = db.ceremony.findOne({
     where: {
       date: {
-        [Op.gt]: moment().add(1, "days"),
+        [Op.gt]: moment(),
       },
     },
   });
@@ -29,11 +29,13 @@ const getLastCeremony = async () => {
 };
 
 const getAvailableTimesById = async (payload) => {
-  const reservations = await db.Reservation.findAll({
-    where: { CeremonyId: payload },
+  
+  const reservations = await db.reservation.findAll({
+    where: { ceremonyId: payload },
   });
-  const ceremony = await db.Ceremony.findOne({
-    where: { id: 3 },
+
+  const ceremony = await db.ceremony.findOne({
+    where: { id: payload },
   });
 
   const timeRepetitions = reservations.reduce((acc, curr) => {
