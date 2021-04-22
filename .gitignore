@@ -351,5 +351,6 @@ MigrationBackup/
 .ionide/
 
 Server/build/
+Server/.env
 Client/.env.production
 Client/.env.development

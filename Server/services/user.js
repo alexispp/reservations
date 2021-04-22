@@ -5,7 +5,7 @@ const { Op } = require("sequelize");
 const getSignedToken = require("../util/signedToken");
 
 const createUser = async (payload) => {
-  const user = await db.User.findOne({
+  const user = await db.user.findOne({
     where: {
       email: payload.email,
     },
@@ -24,7 +24,7 @@ const createUser = async (payload) => {
 };
 
 const signInUser = async (payload) => {
-  const user = await db.User.findOne({
+  const user = await db.user.findOne({
     where: {
       username: payload.username,
     },

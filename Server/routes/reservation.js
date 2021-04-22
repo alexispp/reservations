@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const result = await db.Reservation.findAll();
+    const result = await db.reservation.findAll();
 
     res.json(result);
   } catch (error) {
@@ -23,11 +23,11 @@ router.post("/", async (req, res) => {
     res.status(400).send("all fields are mandayory");
 
   try {
-    await db.Reservation.create({
+    await db.reservation.create({
       name: req.body.name,
       time: req.body.time,
       timeStamp: req.body.timeStamp,
-      CeremonyId: req.body.ceremony,
+      ceremonyId: req.body.ceremony,
     });
     res
       .status(201)
@@ -40,8 +40,8 @@ router.post("/", async (req, res) => {
 
 router.post("/getAllByCeremony", async (req, res) => {
   try {
-    const result = await db.Reservation.findAll({
-      where: { CeremonyId: req.body.ceremonyId },
+    const result = await db.reservation.findAll({
+      where: { ceremonyId: req.body.ceremonyId },
     });
     res.json(result);
   } catch (error) {

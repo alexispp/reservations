@@ -13,3 +13,5 @@ npx sequelize-cli model:generate --name Ceremony --attributes name:string,date:d
 
 realtions
 npx sequelize-cli migration:generate --name add-ceremony-reservation-association
+
+https://bcrypt-generator.com/

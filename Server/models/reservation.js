@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      this.belongsTo(models.Ceremony);
+      this.belongsTo(models.ceremony);
 
     }
   }
@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Reservation",
+      modelName: "reservation",
     }
   );
 

@@ -8,7 +8,7 @@ router.post("/", async (request, response) => {
   const username = request.body.username;
   const password = request.body.password;
   if (username && password) {
-    const user = await db.User.findAll({
+    const user = await db.user.findAll({
       where: {
         [Op.and]: [{ username }, { password }],
       },
