@@ -315,7 +315,9 @@ const ReservationView = (props) => {
                     </>
                 )}
 
-                <Typography variant="h1">Oh! no hay ceremonias :(</Typography>
+                <Typography className="NoCeremonyErrorMessage" variant="h1">
+                    Oh! no hay ceremonias :(
+                </Typography>
 
                 <footer className="Footer">
                     <div style={{ paddingInline: "10px" }}>Subsede Liniers</div>

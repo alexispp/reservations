@@ -117,3 +117,13 @@
 .CeremonyName {
     color: #fff;
 }
+
+.NoCeremonyErrorMessage {
+    color: #fff;
+    font-weight: 600 !important;
+    -webkit-text-stroke: 1px black; /* width and color */
+    padding: 40px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 25px;
+    border: 1px solid black;
+}
