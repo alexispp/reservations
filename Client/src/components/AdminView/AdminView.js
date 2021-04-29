@@ -69,17 +69,12 @@ const NewCeremonyDialog = ({ open, handleClose }) => {
         }}
         onSubmit={(values, actions) => {
           ceremonyApi.addCeremony(values);
-          handleClose();
+          handleClose(false);
         }}
       >
         {(props) => (
           <DialogContent>
             <DialogContent>
-              {/* <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
-          </DialogContentText> */}
-
               <Form className="Form">
                 <TextField
                   id="name"
@@ -186,6 +181,7 @@ const AdminView = () => {
     const cer = await ceremonyApi.getCeremonies();
     return cer;
   }, []);
+
   const getReservations = useCallback(
     async (id) => await reservationApi.getReservations(id),
     []
@@ -346,8 +342,13 @@ const AdminView = () => {
 
       <NewCeremonyDialog
         open={openNewReservation}
-        handleClose={() => {
+        handleClose={(exit) => {
           setOpenNewReservation(false);
+          if(!exit){
+            (async () => {
+              const resultCeremonies = await getCeremonies();
+              setCeremonies(resultCeremonies.data);
+          })();}
         }}
       />
     </>
