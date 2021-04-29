@@ -44,130 +44,6 @@ import * as reservationApi from "../../api/reservation";
 
 import { signOut } from "../../store/login/loginActions";
 
-const NewCeremonyDialog = ({ open, handleClose }) => {
-  const ceremonyTimes = [
-    "09:00 HS",
-    "11:00 HS",
-    "15:00 HS",
-    "17:00 HS",
-    "19:00 HS",
-  ];
-
-  return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="form-dialog-title"
-    >
-      <DialogTitle id="form-dialog-title">Nueva Ceremonia</DialogTitle>
-      <Formik
-        initialValues={{
-          name: "",
-          date: null,
-          numberOfAssistants: "",
-          timeOptions: [],
-        }}
-        onSubmit={(values, actions) => {
-          ceremonyApi.addCeremony(values);
-          handleClose(false);
-        }}
-      >
-        {(props) => (
-          <DialogContent>
-            <DialogContent>
-              <Form className="Form">
-                <TextField
-                  id="name"
-                  name="name"
-                  label="Ceremonia"
-                  value={props.values.name}
-                  onChange={props.handleChange}
-                  fullWidth
-                />
-
-                <MuiPickersUtilsProvider utils={MomentUtils}>
-                  <DatePicker
-                    id="date"
-                    name="date"
-                    label="Fecha"
-                    format="DD/MM/YYYY"
-                    value={props.values.date}
-                    onChange={(val) => props.setFieldValue("date", val)}
-                    clearable
-                    autoOk
-                    disablePast
-                    disableToolbar
-                  />
-                </MuiPickersUtilsProvider>
-
-                <TextField
-                  id="numberOfAssistants"
-                  label="Asistentes"
-                  type="number"
-                  value={props.values.numberOfAssistants}
-                  onChange={props.handleChange}
-                  error={props.touched.email && Boolean(props.errors.email)}
-                  helperText={props.touched.email && props.errors.email}
-                />
-
-                <FieldArray
-                  name="timeOptions"
-                  render={(arrayHelpers) => (
-                    <FormControl component="fieldset">
-                      <FormLabel component="legend">{props.label}</FormLabel>
-                      <FormGroup className="CheckBoxes">
-                        {ceremonyTimes.map((time) => {
-                          return (
-                            <FormControlLabel
-                              key={time}
-                              control={
-                                <Checkbox
-                                  name={time}
-                                  color="secondary"
-                                  onChange={(e) => {
-                                    if (e.target.checked) {
-                                      arrayHelpers.push(time);
-                                    } else {
-                                      arrayHelpers.remove(
-                                        arrayHelpers.form.values[
-                                          props.name
-                                        ].reduce((acc, obj, index) => {
-                                          if (obj === time) {
-                                            acc = index;
-                                          }
-                                          return acc;
-                                        }, 0)
-                                      );
-                                    }
-                                  }}
-                                />
-                              }
-                              labelPlacement="end"
-                              label={time}
-                            />
-                          );
-                        })}
-                      </FormGroup>
-                    </FormControl>
-                  )}
-                />
-              </Form>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                Cancelar
-              </Button>
-              <Button color="primary" type="submit" onClick={props.submitForm}>
-                Aceptar
-              </Button>
-            </DialogActions>
-          </DialogContent>
-        )}
-      </Formik>
-    </Dialog>
-  );
-};
-
 const AdminView = () => {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -192,7 +68,134 @@ const AdminView = () => {
       const resultCeremonies = await getCeremonies();
       setCeremonies(resultCeremonies.data);
     })();
-  }, []);
+  }, [openNewReservation]);
+
+
+  const NewCeremonyDialog = ({ open, handleClose }) => {
+    const ceremonyTimes = [
+      "09:00 HS",
+      "11:00 HS",
+      "15:00 HS",
+      "17:00 HS",
+      "19:00 HS",
+    ];
+  
+    return (
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogTitle id="form-dialog-title">Nueva Ceremonia</DialogTitle>
+        <Formik
+          initialValues={{
+            name: "",
+            date: null,
+            numberOfAssistants: "",
+            timeOptions: [],
+          }}
+          onSubmit={async (values, actions) => {
+            await ceremonyApi.addCeremony(values);
+            handleClose(false);
+          }}
+        >
+          {(props) => (
+            <DialogContent>
+              <DialogContent>
+                <Form className="Form">
+                  <TextField
+                    id="name"
+                    name="name"
+                    label="Ceremonia"
+                    value={props.values.name}
+                    onChange={props.handleChange}
+                    fullWidth
+                  />
+  
+                  <MuiPickersUtilsProvider utils={MomentUtils}>
+                    <DatePicker
+                      id="date"
+                      name="date"
+                      label="Fecha"
+                      format="DD/MM/YYYY"
+                      value={props.values.date}
+                      onChange={(val) => props.setFieldValue("date", val)}
+                      clearable
+                      autoOk
+                      disablePast
+                      disableToolbar
+                    />
+                  </MuiPickersUtilsProvider>
+  
+                  <TextField
+                    id="numberOfAssistants"
+                    label="Asistentes"
+                    type="number"
+                    value={props.values.numberOfAssistants}
+                    onChange={props.handleChange}
+                    error={props.touched.email && Boolean(props.errors.email)}
+                    helperText={props.touched.email && props.errors.email}
+                  />
+  
+                  <FieldArray
+                    name="timeOptions"
+                    render={(arrayHelpers) => (
+                      <FormControl component="fieldset">
+                        <FormLabel component="legend">{props.label}</FormLabel>
+                        <FormGroup className="CheckBoxes">
+                          {ceremonyTimes.map((time) => {
+                            return (
+                              <FormControlLabel
+                                key={time}
+                                control={
+                                  <Checkbox
+                                    name={time}
+                                    color="secondary"
+                                    onChange={(e) => {
+                                      if (e.target.checked) {
+                                        arrayHelpers.push(time);
+                                      } else {
+                                        arrayHelpers.remove(
+                                          arrayHelpers.form.values[
+                                            props.name
+                                          ].reduce((acc, obj, index) => {
+                                            if (obj === time) {
+                                              acc = index;
+                                            }
+                                            return acc;
+                                          }, 0)
+                                        );
+                                      }
+                                    }}
+                                  />
+                                }
+                                labelPlacement="end"
+                                label={time}
+                              />
+                            );
+                          })}
+                        </FormGroup>
+                      </FormControl>
+                    )}
+                  />
+                </Form>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} color="primary">
+                  Cancelar
+                </Button>
+                <Button color="primary" type="submit" onClick={props.submitForm}>
+                  Aceptar
+                </Button>
+              </DialogActions>
+            </DialogContent>
+          )}
+        </Formik>
+      </Dialog>
+    );
+  };
+  
+
 
   const onClickCeremony = async (id) => {
     const resultReservations = await getReservations(id);
@@ -344,11 +347,6 @@ const AdminView = () => {
         open={openNewReservation}
         handleClose={(exit) => {
           setOpenNewReservation(false);
-          if(!exit){
-            (async () => {
-              const resultCeremonies = await getCeremonies();
-              setCeremonies(resultCeremonies.data);
-          })();}
         }}
       />
     </>

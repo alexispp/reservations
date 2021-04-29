@@ -25,7 +25,7 @@ const saveCeremony = async (req, res) => {
 
   try {
     await CeremonyServices.saveCeremony(payload);
-    res.status(201);
+    res.status(201).send('');
   } catch (error) {
     console.log(error);
     res.status(500).send("error! see the logs");

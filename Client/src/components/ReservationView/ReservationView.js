@@ -257,6 +257,10 @@ const ReservationView = (props) => {
                                             variant="contained"
                                             onClick={() => {
                                                 setAddName(false);
+                                                (async () => {
+                                                    const availableTimes = await getAvailableTimes();
+                                                    setAvailableTimes(availableTimes.data);
+                                                })();
                                             }}
                                         >
                                             Atras
