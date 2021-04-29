@@ -14,7 +14,7 @@ const saveCeremony = async (payload) => {
 };
 
 const getCeremonies = async () => {
-  return await db.ceremony.findAll();
+  return await db.ceremony.findAll({order:[['date', 'DESC']]});
 };
 
 const getLastCeremony = async () => {
