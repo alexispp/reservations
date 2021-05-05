@@ -10,6 +10,16 @@ const getCeremonies = async (_, res) => {
   }
 };
 
+const getAllCeremonies = async (_, res) => {
+  try {
+    const response = await CeremonyServices.getAllCeremonies();
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("error! see the logs");
+  }
+};
+
 const saveCeremony = async (req, res) => {
   const payload = req.body;
 
@@ -64,6 +74,7 @@ const getAvailableTimesById = async (req, res) => {
 module.exports = {
   saveCeremony,
   getCeremonies,
+  getAllCeremonies,
   getLastCeremony,
   getAvailableTimesById,
 };

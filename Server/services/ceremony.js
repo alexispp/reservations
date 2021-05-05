@@ -3,70 +3,83 @@ const { Op, col, fn } = require("sequelize");
 const moment = require("moment");
 
 const saveCeremony = async (payload) => {
-  const newCeremony = new db.ceremony({
-    name: payload.name,
-    date: payload.date,
-    numberOfAssistants: payload.numberOfAssistants,
-    timeOptions: JSON.stringify(payload.timeOptions),
-  });
+    const newCeremony = new db.ceremony({
+        name: payload.name,
+        date: payload.date,
+        numberOfAssistants: payload.numberOfAssistants,
+        timeOptions: JSON.stringify(payload.timeOptions)
+    });
 
-  return newCeremony.save();
+    return newCeremony.save();
 };
 
 const getCeremonies = async () => {
-  return await db.ceremony.findAll({order:[['date', 'DESC']]});
+    return await db.ceremony.findAll({
+        where: {
+            date: {
+                [Op.gt]: moment()
+            }
+        },
+        order: [["date", "DESC"]]
+    });
+};
+
+const getAllCeremonies = async () => {
+    return await db.ceremony.findAll({
+        order: [["date", "DESC"]]
+    });
 };
 
 const getLastCeremony = async () => {
-  const lastCeremony = db.ceremony.findOne({
-    where: {
-      date: {
-        [Op.gt]: moment(),
-      },
-    },
-  });
-  return lastCeremony;
+    const lastCeremony = db.ceremony.findOne({
+        where: {
+            date: {
+                [Op.gt]: moment()
+            }
+        }
+    });
+    return lastCeremony;
 };
 
 const getAvailableTimesById = async (payload) => {
-  
-  const reservations = await db.reservation.findAll({
-    where: { ceremonyId: payload },
-  });
+    const reservations = await db.reservation.findAll({
+        where: { ceremonyId: payload }
+    });
 
-  const ceremony = await db.ceremony.findOne({
-    where: { id: payload },
-  });
+    const ceremony = await db.ceremony.findOne({
+        where: { id: payload }
+    });
 
-  const timeRepetitions = reservations.reduce((acc, curr) => {
-    if (acc[curr.time] !== undefined) acc[curr.time] += 1;
-    else acc[curr.time] = 1;
-    return acc;
-  }, {});
+    const timeRepetitions = reservations.reduce((acc, curr) => {
+        if (acc[curr.time] !== undefined) acc[curr.time] += 1;
+        else acc[curr.time] = 1;
+        return acc;
+    }, {});
 
-  const objResponse = JSON.parse(ceremony.timeOptions).map((curr) => {
-    a = +1;
-    const obj = {
-      time: curr,
-      available:
-        timeRepetitions[curr] !== undefined
-          ? timeRepetitions[curr] < ceremony.numberOfAssistants
-          : true,
-    };
-    return obj;
-  });
+    const objResponse = JSON.parse(ceremony.timeOptions).map((curr) => {
+        a = +1;
+        const obj = {
+            time: curr,
+            available:
+                timeRepetitions[curr] !== undefined
+                    ? timeRepetitions[curr] < ceremony.numberOfAssistants
+                    : true
+        };
+        return obj;
+    });
 
-  const isThereOneAvailableTime = objResponse.reduce((acc, curr) => {
-    return acc || curr.available;
-  }, false);
+    const isThereOneAvailableTime = objResponse.reduce((acc, curr) => {
+        return acc || curr.available;
+    }, false);
 
-  // return objResponse;
-  return isThereOneAvailableTime ? objResponse : undefined;
+    // return objResponse;
+    return isThereOneAvailableTime ? objResponse : undefined;
 };
 
 module.exports = {
-  saveCeremony,
-  getCeremonies,
-  getLastCeremony,
-  getAvailableTimesById,
+    saveCeremony,
+    getCeremonies,
+    getAllCeremonies,
+    getLastCeremony,
+    getAvailableTimesById
 };

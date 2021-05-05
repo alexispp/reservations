@@ -10,6 +10,16 @@ export const getCeremonies = async () => {
   }
 };
 
+export const getAllCeremonies = async () => {
+  try {
+    const response = await API.get(`/ceremony/all`);
+    return response;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+};
+
 export const addCeremony = async (ceremony) => {
   try {
     const response = await API.post(`/ceremony`, ceremony);

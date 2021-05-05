@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 
 import AdminView from "./components/AdminView/AdminView";
+import CeremoniesView  from "./components/AdminView/CeremoniesView/CeremoniesView";
 import ReservationView from "./components/ReservationView/ReservationView";
 import PrivateRoute from './components/privateRoute'
 
@@ -39,6 +40,9 @@ function App() {
       {/* <ProvideAuth> */}
         <Router>
           <Switch>
+            <PrivateRoute path="/admin/ceremonies">
+              <CeremoniesView  />
+            </PrivateRoute>
             <PrivateRoute path="/admin">
               <AdminView  />
             </PrivateRoute>
