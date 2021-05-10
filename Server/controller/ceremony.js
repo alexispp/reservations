@@ -71,10 +71,25 @@ const getAvailableTimesById = async (req, res) => {
   }
 };
 
+const deleteCeremony = async (req, res) => {
+  const payload = req.params;
+
+  if (!payload) res.status(500).send("no id");
+
+  try {
+    await CeremonyServices.deleteCeremony(payload.id);
+    res.status(201).send('');
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("error! see the logs");
+  }
+};
+
 module.exports = {
   saveCeremony,
   getCeremonies,
   getAllCeremonies,
   getLastCeremony,
   getAvailableTimesById,
+  deleteCeremony
 };

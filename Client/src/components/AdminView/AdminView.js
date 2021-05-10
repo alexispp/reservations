@@ -25,7 +25,12 @@ import {
     FormControlLabel,
     Checkbox,
     Typography,
+    IconButton,
+
 } from "@material-ui/core";
+
+import DeleteIcon from '@material-ui/icons/Delete';
+
 
 import MomentUtils from "@date-io/moment";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
@@ -61,10 +66,20 @@ const AdminView = () => {
         []
     );
 
+    const deleteCeremony = useCallback(
+        async (id) => {
+            await ceremonyApi.deleteCeremony(id);
+            const newCeremonies = ceremonies.filter((c)=>c.id!==id)
+            setCeremonies(newCeremonies)
+        },
+        []
+    );
+
     useEffect(() => {
         (async () => {
             const resultCeremonies = await getCeremonies();
             setCeremonies(resultCeremonies.data);
+
         })();
     }, [openNewReservation]);
 
@@ -283,56 +298,60 @@ const AdminView = () => {
                         <AddIcon />
                     </Fab>
 
-                    <div className="CeremoniesGridListRoot">
-                        {ceremonies && (
-                            <GridList className="CeremoniesGridList">
-                                {ceremonies.map((ceremony, index) => {
-                                    return (
-                                        <GridListTile key={index}>
-                                            <Paper
-                                                className="PaperCeremony"
-                                                onClick={() => {
-                                                    onClickCeremony(
-                                                        ceremony.id
-                                                    );
-                                                }}
-                                            >
-                                                <div className="PaperCeremonyData">
-                                                    <Typography variant="h5">
-                                                        {ceremony.name}
-                                                    </Typography>
-                                                    <Typography variant="h6">
-                                                        {moment(
-                                                            ceremony.date
-                                                        ).format("DD/MM/YYYY")}
-                                                    </Typography>
-                                                    <div>
-                                                        Cantidad de Asistentes:{" "}
-                                                        {
-                                                            ceremony.numberOfAssistants
-                                                        }
-                                                    </div>
-                                                    <div>
-                                                        Horarios:{" "}
-                                                        {JSON.stringify(
-                                                            ceremony.timeOptions
-                                                        )
-                                                            .replaceAll('"', "")
-                                                            .replaceAll(
-                                                                "\\",
-                                                                ""
+                    {ceremonies && ceremonies.length>0? (
+                        <div className="CeremoniesGridListRoot">
+                                <GridList className="CeremoniesGridList">
+                                    {ceremonies.map((ceremony, index) => {
+                                        return (
+                                            <GridListTile key={index}>
+                                                <Paper
+                                                    className="PaperCeremony"
+                                                    onClick={() => {
+                                                        onClickCeremony(
+                                                            ceremony.id
+                                                        );
+                                                    }}
+                                                >
+                                                <IconButton className="DeleteButton" aria-label="delete" onClick={()=>{deleteCeremony(ceremony.id)}}>
+                                                    <DeleteIcon style={{ fontSize: 15 }}/>
+                                                </IconButton>
+                                                    <div className="PaperCeremonyData">
+                                                        <Typography variant="h5">
+                                                            {ceremony.name}
+                                                        </Typography>
+                                                        <Typography variant="h6">
+                                                            {moment(
+                                                                ceremony.date
+                                                            ).format("DD/MM/YYYY")}
+                                                        </Typography>
+                                                        <div>
+                                                            Cantidad de Asistentes:{" "}
+                                                            {
+                                                                ceremony.numberOfAssistants
+                                                            }
+                                                        </div>
+                                                        <div>
+                                                            Horarios:{" "}
+                                                            {JSON.stringify(
+                                                                ceremony.timeOptions
                                                             )
-                                                            .replace("[", "")
-                                                            .replace("]", "")}
+                                                                .replaceAll('"', "")
+                                                                .replaceAll(
+                                                                    "\\",
+                                                                    ""
+                                                                )
+                                                                .replace("[", "")
+                                                                .replace("]", "")}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </Paper>
-                                        </GridListTile>
-                                    );
-                                })}
-                            </GridList>
-                        )}
-                    </div>
+                                                </Paper>
+                                            </GridListTile>
+                                        );
+                                    })}
+                                </GridList>
+                        </div>
+                        ):
+                    <Typography variant="h5">No hay próximas ceremonias</Typography>}
                 </Paper>
                 <Paper className="Paper TablePaper">
                     <TableContainer component={Paper}>

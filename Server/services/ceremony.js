@@ -13,6 +13,16 @@ const saveCeremony = async (payload) => {
     return newCeremony.save();
 };
 
+const deleteCeremony = async (ceremonyId) => {
+    const ceremony = await db.ceremony.findOne({
+        where: {
+            id: ceremonyId
+        }
+    });
+
+     ceremony.destroy();
+};
+
 const getCeremonies = async () => {
     return await db.ceremony.findAll({
         where: {
@@ -81,5 +91,6 @@ module.exports = {
     getCeremonies,
     getAllCeremonies,
     getLastCeremony,
-    getAvailableTimesById
+    getAvailableTimesById,
+    deleteCeremony
 };

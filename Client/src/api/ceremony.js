@@ -52,3 +52,13 @@ export const getAvailableTimes = async(id)=>{
   }
 
 }
+
+export const deleteCeremony = async (id) => {
+  try {
+    const response = await API.delete(`/ceremony/${id}`);
+    return response;
+  } catch (error) {
+    console.log(error.response);
+    return error.response;
+  }
+};

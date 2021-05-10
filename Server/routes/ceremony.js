@@ -5,7 +5,8 @@ const {
   getCeremonies,
   getAllCeremonies,
   getLastCeremony,
-  getAvailableTimesById
+  getAvailableTimesById,
+  deleteCeremony,
 } = require("../controller/ceremony");
 
 const router = express.Router();
@@ -15,5 +16,6 @@ router.get("/all", getAllCeremonies);
 router.get("/lastCeremony", getLastCeremony);
 router.get("/:id/availableTimes", getAvailableTimesById);
 router.post("/", saveCeremony);
+router.delete("/:id", deleteCeremony);
 
 module.exports = router;
