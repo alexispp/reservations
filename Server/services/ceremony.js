@@ -7,7 +7,8 @@ const saveCeremony = async (payload) => {
         name: payload.name,
         date: payload.date,
         numberOfAssistants: payload.numberOfAssistants,
-        timeOptions: JSON.stringify(payload.timeOptions)
+        timeOptions: JSON.stringify(payload.timeOptions),
+        show: JSON.stringify(payload.show)
     });
 
     return newCeremony.save();
@@ -20,7 +21,7 @@ const deleteCeremony = async (ceremonyId) => {
         }
     });
 
-     ceremony.destroy();
+    ceremony.destroy();
 };
 
 const getCeremonies = async () => {
@@ -30,22 +31,27 @@ const getCeremonies = async () => {
                 [Op.gt]: moment()
             }
         },
-        order: [["date", "DESC"]]
+        order: [["date", "ASC"]]
     });
 };
 
 const getAllCeremonies = async () => {
     return await db.ceremony.findAll({
-        order: [["date", "DESC"]]
+        order: [["date", "ASC"]]
     });
 };
 
 const getLastCeremony = async () => {
     const lastCeremony = db.ceremony.findOne({
         where: {
-            date: {
-                [Op.gt]: moment()
-            }
+            [Op.and]: [
+                {
+                    date: {
+                        [Op.gt]: moment()
+                    }
+                },
+                { show: true }
+            ]
         }
     });
     return lastCeremony;

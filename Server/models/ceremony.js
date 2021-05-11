@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       date: DataTypes.DATE,
       numberOfAssistants: DataTypes.INTEGER,
       timeOptions: DataTypes.STRING,
+      show: DataTypes.BOOLEAN,
     },
     {
       sequelize,

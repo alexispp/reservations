@@ -48,10 +48,19 @@
     background-color: #E5E5E5;
     cursor: pointer;
   }
-
+  
   &:hover .DeleteButton{
     display: block !important;
   }
+  
+  &.NotShow{
+    background-color: rgba(255, 0, 0, 0.4);
+    &:hover{
+      background-color: rgba(255, 0, 0, 0.8);
+      cursor: pointer;
+    }
+  }
+
 }  
 
 .DeleteButton{

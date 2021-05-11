@@ -81,6 +81,7 @@ const CeremoniesView=()=>{
                                     <StyledTableCell>Fecha</StyledTableCell>
                                     <StyledTableCell>Asistentes</StyledTableCell>
                                     <StyledTableCell>Horarios</StyledTableCell>
+                                    <StyledTableCell>Mostrar</StyledTableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
@@ -97,6 +98,7 @@ const CeremoniesView=()=>{
                                             <StyledTableCell> {row.date} </StyledTableCell>
                                             <StyledTableCell> {row.numberOfAssistants} </StyledTableCell>
                                             <StyledTableCell> {row.timeOptions} </StyledTableCell>
+                                            <StyledTableCell> {row.show?'Si':'No'} </StyledTableCell>
                                         </StyledTableRow>
                                     ))}
                             </TableBody>

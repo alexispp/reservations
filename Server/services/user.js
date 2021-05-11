@@ -15,7 +15,7 @@ const createUser = async (payload) => {
     throw new Error("User already exist");
   }
 
-  const passHashed = await bcrypt.hash(payload.password, 10);
+  const passHashed = await w.hash(payload.password, 10);
   const newUser = new User({
     email: payload.email,
     password: passHashed,

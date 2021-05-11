@@ -20,6 +20,9 @@ module.exports = {
       timeOptions: {
         type: Sequelize.STRING
       },
+      show: {
+        type: Sequelize.BOOLEAN
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

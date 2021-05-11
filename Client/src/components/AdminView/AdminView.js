@@ -81,7 +81,7 @@ const AdminView = () => {
             setCeremonies(resultCeremonies.data);
 
         })();
-    }, [openNewReservation]);
+    }, []);
 
     const NewCeremonyDialog = ({ open, handleClose }) => {
         const ceremonyTimes = [
@@ -106,10 +106,14 @@ const AdminView = () => {
                         name: "",
                         date: null,
                         numberOfAssistants: "",
-                        timeOptions: []
+                        timeOptions: [],
+                        show:true,
                     }}
                     onSubmit={async (values, actions) => {
                         await ceremonyApi.addCeremony(values);
+                        const resultCeremonies = await getCeremonies();
+                        setCeremonies(resultCeremonies.data);
+
                         handleClose(false);
                     }}
                 >
@@ -159,7 +163,7 @@ const AdminView = () => {
                                             props.touched.email &&
                                             props.errors.email
                                         }
-                                    />
+                                        />
 
                                     <FieldArray
                                         name="timeOptions"
@@ -173,60 +177,55 @@ const AdminView = () => {
                                                         (time) => {
                                                             return (
                                                                 <FormControlLabel
-                                                                    key={time}
-                                                                    control={
+                                                                key={time}
+                                                                control={
                                                                         <Checkbox
-                                                                            name={
+                                                                        name={
                                                                                 time
                                                                             }
                                                                             color="secondary"
-                                                                            onChange={(
-                                                                                e
-                                                                            ) => {
-                                                                                if (
-                                                                                    e
-                                                                                        .target
-                                                                                        .checked
-                                                                                ) {
-                                                                                    arrayHelpers.push(
-                                                                                        time
-                                                                                    );
+                                                                            onChange={(e) => {
+                                                                                if (e.target.checked) {
+                                                                                    arrayHelpers.push(time);
                                                                                 } else {
                                                                                     arrayHelpers.remove(
-                                                                                        arrayHelpers.form.values[
-                                                                                            props
-                                                                                                .name
-                                                                                        ].reduce(
-                                                                                            (
-                                                                                                acc,
-                                                                                                obj,
-                                                                                                index
-                                                                                            ) => {
-                                                                                                if (
-                                                                                                    obj ===
-                                                                                                    time
-                                                                                                ) {
+                                                                                        arrayHelpers.form.values.timeOptions.reduce((acc,obj,index) => {
+                                                                                                if (obj ===time) {
                                                                                                     acc = index;
                                                                                                 }
                                                                                                 return acc;
-                                                                                            },
-                                                                                            0
-                                                                                        )
+                                                                                            },0
+                                                                                            )
                                                                                     );
-                                                                                }
+                                                                                }   
                                                                             }}
                                                                         />
                                                                     }
                                                                     labelPlacement="end"
                                                                     label={time}
-                                                                />
-                                                            );
+                                                                    />
+                                                                    );
                                                         }
                                                     )}
                                                 </FormGroup>
                                             </FormControl>
                                         )}
                                     />
+
+<FormControlLabel
+        control={
+          <Checkbox
+            checked={props.values.show}
+            onChange={props.handleChange}
+            name="show"
+            color="primary"
+          />
+        }
+        label="Mostrar"
+      />
+
+
+
                                 </Form>
                             </DialogContent>
                             <DialogActions>
@@ -298,14 +297,15 @@ const AdminView = () => {
                         <AddIcon />
                     </Fab>
 
-                    {ceremonies && ceremonies.length>0? (
+                    {ceremonies && ceremonies.length>0? ( 
                         <div className="CeremoniesGridListRoot">
                                 <GridList className="CeremoniesGridList">
                                     {ceremonies.map((ceremony, index) => {
                                         return (
                                             <GridListTile key={index}>
                                                 <Paper
-                                                    className="PaperCeremony"
+                                                    className={`PaperCeremony ${!ceremony.show?'NotShow':''}`}
+                                                    
                                                     onClick={() => {
                                                         onClickCeremony(
                                                             ceremony.id
@@ -315,7 +315,7 @@ const AdminView = () => {
                                                 <IconButton className="DeleteButton" aria-label="delete" onClick={()=>{deleteCeremony(ceremony.id)}}>
                                                     <DeleteIcon style={{ fontSize: 15 }}/>
                                                 </IconButton>
-                                                    <div className="PaperCeremonyData">
+                                                    <div className='PaperCeremonyData' >
                                                         <Typography variant="h5">
                                                             {ceremony.name}
                                                         </Typography>
@@ -324,6 +324,9 @@ const AdminView = () => {
                                                                 ceremony.date
                                                             ).format("DD/MM/YYYY")}
                                                         </Typography>
+                                                        <div>
+                                                            Mostrar: {ceremony.show?'Si':'No'}
+                                                        </div>
                                                         <div>
                                                             Cantidad de Asistentes:{" "}
                                                             {
