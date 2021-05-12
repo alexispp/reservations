@@ -26,10 +26,12 @@ import {
     Checkbox,
     Typography,
     IconButton,
-
+    Toolbar,
+    Tooltip,
 } from "@material-ui/core";
 
 import DeleteIcon from '@material-ui/icons/Delete';
+import GetAppRoundedIcon from '@material-ui/icons/GetAppRounded';
 
 
 import MomentUtils from "@date-io/moment";
@@ -46,6 +48,8 @@ import * as ceremonyApi from "../../api/ceremony";
 import * as reservationApi from "../../api/reservation";
 import Header from "./Header/Header";
 
+import { CSVLink } from "react-csv";
+
 
 const AdminView = () => {
 
@@ -54,6 +58,7 @@ const AdminView = () => {
     const [openNewReservation, setOpenNewReservation] = useState(false);
     const [ceremonies, setCeremonies] = useState([]);
     const [reservations, setReservations] = useState([]);
+    const [selectedCeremony, setSelectedCeremony] = useState(null);
 
 
     const getCeremonies = useCallback(async () => {
@@ -247,8 +252,9 @@ const AdminView = () => {
         );
     };
 
-    const onClickCeremony = async (id) => {
-        const resultReservations = await getReservations(id);
+    const onClickCeremony = async (ceremony) => {
+        setSelectedCeremony(ceremony);
+        const resultReservations = await getReservations(ceremony.id);
         setReservations(resultReservations.data);
     };
 
@@ -280,7 +286,9 @@ const AdminView = () => {
     }))(TableRow);
 
     
-    
+    const downloadTable = ()=>{
+
+    }
     
 
     return (
@@ -306,11 +314,7 @@ const AdminView = () => {
                                                 <Paper
                                                     className={`PaperCeremony ${!ceremony.show?'NotShow':''}`}
                                                     
-                                                    onClick={() => {
-                                                        onClickCeremony(
-                                                            ceremony.id
-                                                        );
-                                                    }}
+                                                    onClick={() => {onClickCeremony(ceremony);}}
                                                 >
                                                 <IconButton className="DeleteButton" aria-label="delete" onClick={()=>{deleteCeremony(ceremony.id)}}>
                                                     <DeleteIcon style={{ fontSize: 15 }}/>
@@ -357,6 +361,30 @@ const AdminView = () => {
                     <Typography variant="h5">No hay próximas ceremonias</Typography>}
                 </Paper>
                 <Paper className="Paper TablePaper">
+                        {reservations && selectedCeremony &&
+                    <Toolbar className="Toolbar">
+                              <Typography  variant="h6" id="tableTitle" component="div">
+                              {selectedCeremony.name}
+                                </Typography>
+                        <Tooltip title="Descargar" >
+                        <CSVLink
+                            data={reservations.reduce((acc,curr)=>{ 
+                                acc.push([curr.name, curr.time]);
+                                return acc;
+                             }, [["Nommbre", "Horario"]])}
+                            filename={ `${selectedCeremony.name} - reservaciones.csv`}
+                            className="btn btn-primary"
+                            target="_blank"
+                        >
+                            <IconButton aria-label="download" >
+                                <GetAppRoundedIcon style={{ fontSize: 15 }}/>
+                            </IconButton>
+
+                        </CSVLink>
+                            
+                        </Tooltip>
+                    </Toolbar>
+                        }
                     <TableContainer component={Paper}>
                         <Table
                             stickyHeader
