@@ -1,0 +1,41 @@
+.Footer {
+  height: 40px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #000;
+  color: #fff;
+
+  position: absolute;
+  bottom: 0;
+  
+  @media (max-width: 850px) {
+    // position: relative;
+
+  }
+}
+
+
+.MuiAlert-message{
+  font-size: 30px;
+}
+.MuiSvgIcon-root{
+  width: 2em !important;
+  height: 2em !important;
+}
+
+
+@media (max-width: 850px) {
+  
+  .MuiAlert-message{
+    font-size: 20px;
+  }
+  .MuiSvgIcon-root{
+    display: block;
+    width: 1.5em !important;
+    height: 1.5em !important;
+  }
+
+}
