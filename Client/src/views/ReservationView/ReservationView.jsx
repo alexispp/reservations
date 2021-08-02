@@ -7,16 +7,13 @@ import {
     TextField,
     Snackbar,
     Link,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle
+    Dialog
 } from "@material-ui/core";
+
+import Login from "../../components/Login/Login";
+
 import MuiAlert from "@material-ui/lab/Alert";
 import moment from "moment";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
-import { signIn } from "../../store/login/loginActions";
 
 import { withStyles } from "@material-ui/core/styles";
 
@@ -25,7 +22,7 @@ import "./ReservationView.scss";
 
 import * as ceremonyApi from "../../api/ceremony";
 
-const ColorButton = withStyles((theme) => ({
+const ColorButton = withStyles(() => ({
     root: {
         color: "#ffff",
         border: "1px solid #ffff",
@@ -91,63 +88,13 @@ const CssTextField = withStyles({
 })(TextField);
 
 const LoginDialog = ({ open, handleClose }) => {
-    const dispatch = useDispatch();
-    const history = useHistory();
-    // const { error } = useSelector((state) => state.authentication);
-    const [username, setUserName] = useState("");
-    const [password, setPassword] = useState("");
-
-    // const auth = useAuth();
-
     return (
         <Dialog
             open={open}
             onClose={handleClose}
             aria-labelledby="form-dialog-title"
         >
-            <DialogTitle id="form-dialog-title">Iniciar sesión</DialogTitle>
-            <DialogContent>
-                {/* <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
-          </DialogContentText> */}
-                <form>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="user"
-                        label="Usuario"
-                        fullWidth
-                        onChange={(event) => {
-                            setUserName(event.target.value);
-                        }}
-                    />
-                    <TextField
-                        margin="dense"
-                        id="password"
-                        label="Contraseña"
-                        type="password"
-                        fullWidth
-                        onChange={(event) => {
-                            setPassword(event.target.value);
-                        }}
-                    />
-                </form>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={handleClose} color="primary">
-                    Cancelar
-                </Button>
-                <Button
-                    onClick={() => {
-                        dispatch(signIn({ username, password }, history));
-                    }}
-                    color="primary"
-                    type="submit"
-                >
-                    Aceptar
-                </Button>
-            </DialogActions>
+            <Login />
         </Dialog>
     );
 };
@@ -179,6 +126,7 @@ const ReservationView = (props) => {
             const lastCeremony = await getLastCeremony();
             setCeremony(lastCeremony.data);
         })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -186,6 +134,7 @@ const ReservationView = (props) => {
             const availableTimes = await getAvailableTimes();
             setAvailableTimes(availableTimes.data);
         })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [ceremony]);
 
     const Alert = (props) => {
@@ -258,8 +207,11 @@ const ReservationView = (props) => {
                                             onClick={() => {
                                                 setAddName(false);
                                                 (async () => {
-                                                    const availableTimes = await getAvailableTimes();
-                                                    setAvailableTimes(availableTimes.data);
+                                                    const availableTimes =
+                                                        await getAvailableTimes();
+                                                    setAvailableTimes(
+                                                        availableTimes.data
+                                                    );
                                                 })();
                                             }}
                                         >

@@ -46,7 +46,6 @@ export const signUp = (user, history) => {
       dispatch(signUpSuccess(data));
       history.push("/");
     } catch (error) {
-      console.log(error);
       dispatch(signUpFailure(error));
     }
   };

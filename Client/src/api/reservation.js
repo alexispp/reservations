@@ -5,7 +5,6 @@ export const getReservations = async (ceremonyId) => {
     const response = await API.post(`/reservation/getAllByCeremony`, {ceremonyId});
     return response;
   } catch (error) {
-    console.log(error.response);
     return [];
   }
 };
@@ -15,7 +14,6 @@ export const addReservation = async (reservation) => {
     const response = await API.post(`/reservation`, reservation);
     return response;
   } catch (error) {
-    console.log(error.response);
     return error.response;
   }
 };

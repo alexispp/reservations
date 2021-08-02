@@ -1,60 +1,53 @@
 import "./App.scss";
 
-import React, { useState } from "react";
+import React from "react";
 
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import AdminView from "./components/AdminView/AdminView";
-import CeremoniesView  from "./components/AdminView/CeremoniesView/CeremoniesView";
-import ReservationView from "./components/ReservationView/ReservationView";
-import PrivateRoute from './components/privateRoute'
-
-import { ProvideAuth, useAuth } from "./hooks/auth.js";
+import AdminView from "./views/AdminView/AdminView";
+import CeremoniesView from "./views/CeremoniesView/CeremoniesView";
+import ReservationView from "./views/ReservationView/ReservationView";
+import PrivateRoute from "./components/privateRoute";
 
 function App() {
-  // const [token, setToken] = useState();
+    // const [token, setToken] = useState();
 
-  // function PrivateRoute({ children, ...rest }) {
-  //   // const auth = useAuth();
-  //   return (
-  //     <Route
-  //       {...rest}
-  //       render={({ location }) =>
-  //         auth.user ? (
-  //           children
-  //         ) : (
-  //           <Redirect to={{ pathname: "/", state: { from: location } }} />
-  //         )
-  //       }
-  //     />
-  //   );
-  // }
+    // function PrivateRoute({ children, ...rest }) {
+    //   // const auth = useAuth();
+    //   return (
+    //     <Route
+    //       {...rest}
+    //       render={({ location }) =>
+    //         auth.user ? (
+    //           children
+    //         ) : (
+    //           <Redirect to={{ pathname: "/", state: { from: location } }} />
+    //         )
+    //       }
+    //     />
+    //   );
+    // }
 
-  return (
-    <>
-      {/* <ProvideAuth> */}
-        <Router>
-          <Switch>
-            <PrivateRoute path="/admin/ceremonies">
-              <CeremoniesView  />
-            </PrivateRoute>
-            <PrivateRoute path="/admin">
-              <AdminView  />
-            </PrivateRoute>
+    return (
+        <>
+            {/* <ProvideAuth> */}
+            <Router>
+                <Switch>
+                    <PrivateRoute path="/admin/ceremonies">
+                        <CeremoniesView />
+                    </PrivateRoute>
+                    <PrivateRoute path="/admin">
+                        <AdminView />
+                    </PrivateRoute>
 
-            <Route path="/">
-              <ReservationView />
-            </Route>
-          </Switch>
-        </Router>
-      {/* </ProvideAuth> */}
-    </>
-  );
+                    <Route path="/">
+                        <ReservationView />
+                    </Route>
+                </Switch>
+            </Router>
+            {/* </ProvideAuth> */}
+        </>
+    );
 }
 
 export default App;

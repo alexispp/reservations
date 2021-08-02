@@ -47,7 +47,7 @@ const getLastCeremony = async (_, res) => {
     const response = await CeremonyServices.getLastCeremony();
     res.status(200).json(response);
   } catch (error) {
-    console.log(error);
+    console.log("error");
     res.status(500).send("error! see the logs");
   }
 };

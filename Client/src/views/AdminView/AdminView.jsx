@@ -27,12 +27,11 @@ import {
     Typography,
     IconButton,
     Toolbar,
-    Tooltip,
+    Tooltip
 } from "@material-ui/core";
 
-import DeleteIcon from '@material-ui/icons/Delete';
-import GetAppRoundedIcon from '@material-ui/icons/GetAppRounded';
-
+import DeleteIcon from "@material-ui/icons/Delete";
+import GetAppRoundedIcon from "@material-ui/icons/GetAppRounded";
 
 import MomentUtils from "@date-io/moment";
 import { MuiPickersUtilsProvider, DatePicker } from "@material-ui/pickers";
@@ -46,13 +45,11 @@ import { withStyles } from "@material-ui/core/styles";
 
 import * as ceremonyApi from "../../api/ceremony";
 import * as reservationApi from "../../api/reservation";
-import Header from "./Header/Header";
+import Header from "../../components/Header/Header";
 
 import { CSVLink } from "react-csv";
 
-
 const AdminView = () => {
-
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [openNewReservation, setOpenNewReservation] = useState(false);
@@ -60,32 +57,31 @@ const AdminView = () => {
     const [reservations, setReservations] = useState([]);
     const [selectedCeremony, setSelectedCeremony] = useState(null);
 
-
     const getCeremonies = useCallback(async () => {
         const cer = await ceremonyApi.getCeremonies();
         return cer;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const getReservations = useCallback(
         async (id) => await reservationApi.getReservations(id),
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         []
     );
 
-    const deleteCeremony = useCallback(
-        async (id) => {
-            await ceremonyApi.deleteCeremony(id);
-            const newCeremonies = ceremonies.filter((c)=>c.id!==id)
-            setCeremonies(newCeremonies)
-        },
-        []
-    );
+    const deleteCeremony = useCallback(async (id) => {
+        await ceremonyApi.deleteCeremony(id);
+        const newCeremonies = ceremonies.filter((c) => c.id !== id);
+        setCeremonies(newCeremonies);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         (async () => {
             const resultCeremonies = await getCeremonies();
             setCeremonies(resultCeremonies.data);
-
         })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const NewCeremonyDialog = ({ open, handleClose }) => {
@@ -112,7 +108,7 @@ const AdminView = () => {
                         date: null,
                         numberOfAssistants: "",
                         timeOptions: [],
-                        show:true,
+                        show: true
                     }}
                     onSubmit={async (values, actions) => {
                         await ceremonyApi.addCeremony(values);
@@ -168,7 +164,7 @@ const AdminView = () => {
                                             props.touched.email &&
                                             props.errors.email
                                         }
-                                        />
+                                    />
 
                                     <FieldArray
                                         name="timeOptions"
@@ -182,34 +178,52 @@ const AdminView = () => {
                                                         (time) => {
                                                             return (
                                                                 <FormControlLabel
-                                                                key={time}
-                                                                control={
+                                                                    key={time}
+                                                                    control={
                                                                         <Checkbox
-                                                                        name={
+                                                                            name={
                                                                                 time
                                                                             }
                                                                             color="secondary"
-                                                                            onChange={(e) => {
-                                                                                if (e.target.checked) {
-                                                                                    arrayHelpers.push(time);
+                                                                            onChange={(
+                                                                                e
+                                                                            ) => {
+                                                                                if (
+                                                                                    e
+                                                                                        .target
+                                                                                        .checked
+                                                                                ) {
+                                                                                    arrayHelpers.push(
+                                                                                        time
+                                                                                    );
                                                                                 } else {
                                                                                     arrayHelpers.remove(
-                                                                                        arrayHelpers.form.values.timeOptions.reduce((acc,obj,index) => {
-                                                                                                if (obj ===time) {
-                                                                                                    acc = index;
+                                                                                        arrayHelpers.form.values.timeOptions.reduce(
+                                                                                            (
+                                                                                                acc,
+                                                                                                obj,
+                                                                                                index
+                                                                                            ) => {
+                                                                                                if (
+                                                                                                    obj ===
+                                                                                                    time
+                                                                                                ) {
+                                                                                                    acc =
+                                                                                                        index;
                                                                                                 }
                                                                                                 return acc;
-                                                                                            },0
-                                                                                            )
+                                                                                            },
+                                                                                            0
+                                                                                        )
                                                                                     );
-                                                                                }   
+                                                                                }
                                                                             }}
                                                                         />
                                                                     }
                                                                     labelPlacement="end"
                                                                     label={time}
-                                                                    />
-                                                                    );
+                                                                />
+                                                            );
                                                         }
                                                     )}
                                                 </FormGroup>
@@ -217,20 +231,17 @@ const AdminView = () => {
                                         )}
                                     />
 
-<FormControlLabel
-        control={
-          <Checkbox
-            checked={props.values.show}
-            onChange={props.handleChange}
-            name="show"
-            color="primary"
-          />
-        }
-        label="Mostrar"
-      />
-
-
-
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={props.values.show}
+                                                onChange={props.handleChange}
+                                                name="show"
+                                                color="primary"
+                                            />
+                                        }
+                                        label="Mostrar"
+                                    />
                                 </Form>
                             </DialogContent>
                             <DialogActions>
@@ -285,15 +296,9 @@ const AdminView = () => {
         }
     }))(TableRow);
 
-    
-    const downloadTable = ()=>{
-
-    }
-    
-
     return (
         <>
-          <Header/>  
+            <Header />
             <div className="AdminBody">
                 <Paper className="Paper CeremoniesPaper">
                     <Fab
@@ -305,86 +310,114 @@ const AdminView = () => {
                         <AddIcon />
                     </Fab>
 
-                    {ceremonies && ceremonies.length>0? ( 
+                    {ceremonies && ceremonies.length > 0 ? (
                         <div className="CeremoniesGridListRoot">
-                                <GridList className="CeremoniesGridList">
-                                    {ceremonies.map((ceremony, index) => {
-                                        return (
-                                            <GridListTile key={index}>
-                                                <Paper
-                                                    className={`PaperCeremony ${!ceremony.show?'NotShow':''}`}
-                                                    
-                                                    onClick={() => {onClickCeremony(ceremony);}}
+                            <GridList className="CeremoniesGridList">
+                                {ceremonies.map((ceremony, index) => {
+                                    return (
+                                        <GridListTile key={index}>
+                                            <Paper
+                                                className={`PaperCeremony ${
+                                                    !ceremony.show
+                                                        ? "NotShow"
+                                                        : ""
+                                                }`}
+                                                onClick={() => {
+                                                    onClickCeremony(ceremony);
+                                                }}
+                                            >
+                                                <IconButton
+                                                    className="DeleteButton"
+                                                    aria-label="delete"
+                                                    onClick={() => {
+                                                        deleteCeremony(
+                                                            ceremony.id
+                                                        );
+                                                    }}
                                                 >
-                                                <IconButton className="DeleteButton" aria-label="delete" onClick={()=>{deleteCeremony(ceremony.id)}}>
-                                                    <DeleteIcon style={{ fontSize: 15 }}/>
+                                                    <DeleteIcon
+                                                        style={{ fontSize: 15 }}
+                                                    />
                                                 </IconButton>
-                                                    <div className='PaperCeremonyData' >
-                                                        <Typography variant="h5">
-                                                            {ceremony.name}
-                                                        </Typography>
-                                                        <Typography variant="h6">
-                                                            {moment(
-                                                                ceremony.date
-                                                            ).format("DD/MM/YYYY")}
-                                                        </Typography>
-                                                        <div>
-                                                            Mostrar: {ceremony.show?'Si':'No'}
-                                                        </div>
-                                                        <div>
-                                                            Cantidad de Asistentes:{" "}
-                                                            {
-                                                                ceremony.numberOfAssistants
-                                                            }
-                                                        </div>
-                                                        <div>
-                                                            Horarios:{" "}
-                                                            {JSON.stringify(
-                                                                ceremony.timeOptions
-                                                            )
-                                                                .replaceAll('"', "")
-                                                                .replaceAll(
-                                                                    "\\",
-                                                                    ""
-                                                                )
-                                                                .replace("[", "")
-                                                                .replace("]", "")}
-                                                        </div>
+                                                <div className="PaperCeremonyData">
+                                                    <Typography variant="h5">
+                                                        {ceremony.name}
+                                                    </Typography>
+                                                    <Typography variant="h6">
+                                                        {moment(
+                                                            ceremony.date
+                                                        ).format("DD/MM/YYYY")}
+                                                    </Typography>
+                                                    <div>
+                                                        Mostrar:{" "}
+                                                        {ceremony.show
+                                                            ? "Si"
+                                                            : "No"}
                                                     </div>
-                                                </Paper>
-                                            </GridListTile>
-                                        );
-                                    })}
-                                </GridList>
+                                                    <div>
+                                                        Cantidad de Asistentes:{" "}
+                                                        {
+                                                            ceremony.numberOfAssistants
+                                                        }
+                                                    </div>
+                                                    <div>
+                                                        Horarios:{" "}
+                                                        {JSON.stringify(
+                                                            ceremony.timeOptions
+                                                        )
+                                                            .replaceAll('"', "")
+                                                            .replaceAll(
+                                                                "\\",
+                                                                ""
+                                                            )
+                                                            .replace("[", "")
+                                                            .replace("]", "")}
+                                                    </div>
+                                                </div>
+                                            </Paper>
+                                        </GridListTile>
+                                    );
+                                })}
+                            </GridList>
                         </div>
-                        ):
-                    <Typography variant="h5">No hay próximas ceremonias</Typography>}
+                    ) : (
+                        <Typography variant="h5">
+                            No hay próximas ceremonias
+                        </Typography>
+                    )}
                 </Paper>
                 <Paper className="Paper TablePaper">
-                        {reservations && selectedCeremony &&
-                    <Toolbar className="Toolbar">
-                              <Typography  variant="h6" id="tableTitle" component="div">
-                              {selectedCeremony.name}
-                                </Typography>
-                        <Tooltip title="Descargar" >
-                        <CSVLink
-                            data={reservations.reduce((acc,curr)=>{ 
-                                acc.push([curr.name, curr.time]);
-                                return acc;
-                             }, [["Nommbre", "Horario"]])}
-                            filename={ `${selectedCeremony.name} - reservaciones.csv`}
-                            className="btn btn-primary"
-                            target="_blank"
-                        >
-                            <IconButton aria-label="download" >
-                                <GetAppRoundedIcon style={{ fontSize: 15 }}/>
-                            </IconButton>
-
-                        </CSVLink>
-                            
-                        </Tooltip>
-                    </Toolbar>
-                        }
+                    {reservations && selectedCeremony && (
+                        <Toolbar className="Toolbar">
+                            <Typography
+                                variant="h6"
+                                id="tableTitle"
+                                component="div"
+                            >
+                                {selectedCeremony.name}
+                            </Typography>
+                            <Tooltip title="Descargar">
+                                <CSVLink
+                                    data={reservations.reduce(
+                                        (acc, curr) => {
+                                            acc.push([curr.name, curr.time]);
+                                            return acc;
+                                        },
+                                        [["Nommbre", "Horario"]]
+                                    )}
+                                    filename={`${selectedCeremony.name} - reservaciones.csv`}
+                                    className="btn btn-primary"
+                                    target="_blank"
+                                >
+                                    <IconButton aria-label="download">
+                                        <GetAppRoundedIcon
+                                            style={{ fontSize: 15 }}
+                                        />
+                                    </IconButton>
+                                </CSVLink>
+                            </Tooltip>
+                        </Toolbar>
+                    )}
                     <TableContainer component={Paper}>
                         <Table
                             stickyHeader
@@ -429,8 +462,8 @@ const AdminView = () => {
                         count={reservations ? reservations.length : 0}
                         rowsPerPage={rowsPerPage}
                         page={page}
-                        onChangePage={handleChangePage}
-                        onChangeRowsPerPage={handleChangeRowsPerPage}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
                     />
                 </Paper>
             </div>

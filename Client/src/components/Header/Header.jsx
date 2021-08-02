@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 
@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 
 import "./Header.scss";
-import { signOut } from "../../../store/login/loginActions";
+import { signOut } from "../../store/login/loginActions";
 
 const NavBar = ()=>{
     const dispatch = useDispatch();

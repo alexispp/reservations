@@ -352,5 +352,6 @@ MigrationBackup/
 
 Server/build/
 Server/.env
+Client/.env
 Client/.env.production
 Client/.env.development
