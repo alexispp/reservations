@@ -10,6 +10,16 @@ const getCeremonies = async (_, res) => {
   }
 };
 
+const getAllCeremonies = async (_, res) => {
+  try {
+    const response = await CeremonyServices.getAllCeremonies();
+    res.status(200).json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("error! see the logs");
+  }
+};
+
 const saveCeremony = async (req, res) => {
   const payload = req.body;
 
@@ -25,7 +35,7 @@ const saveCeremony = async (req, res) => {
 
   try {
     await CeremonyServices.saveCeremony(payload);
-    res.status(201);
+    res.status(201).send('');
   } catch (error) {
     console.log(error);
     res.status(500).send("error! see the logs");
@@ -37,7 +47,7 @@ const getLastCeremony = async (_, res) => {
     const response = await CeremonyServices.getLastCeremony();
     res.status(200).json(response);
   } catch (error) {
-    console.log(error);
+    console.log("error");
     res.status(500).send("error! see the logs");
   }
 };
@@ -61,9 +71,25 @@ const getAvailableTimesById = async (req, res) => {
   }
 };
 
+const deleteCeremony = async (req, res) => {
+  const payload = req.params;
+
+  if (!payload) res.status(500).send("no id");
+
+  try {
+    await CeremonyServices.deleteCeremony(payload.id);
+    res.status(201).send('');
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("error! see the logs");
+  }
+};
+
 module.exports = {
   saveCeremony,
   getCeremonies,
+  getAllCeremonies,
   getLastCeremony,
   getAvailableTimesById,
+  deleteCeremony
 };
