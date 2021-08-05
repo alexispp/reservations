@@ -79,7 +79,7 @@ export const signIn = (payload, history) => {
     try {
       const response = await axios({
         method: "post",
-        url: "http://localhost:3000/auth/signIn",
+        url: `${process.env.REACT_APP_API_URL}/auth/signIn`,
         data: payload,
         headers: {
           Authorization: `Bearer ${localStorage.getItem("USER-TOKEN")}`,
