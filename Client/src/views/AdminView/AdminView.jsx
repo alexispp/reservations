@@ -86,10 +86,10 @@ const AdminView = () => {
 
     const NewCeremonyDialog = ({ open, handleClose }) => {
         const ceremonyTimes = [
-            "09:00 HS",
+            "10:00 HS",
             "11:00 HS",
             "15:00 HS",
-            "17:00 HS",
+            "16:00 HS",
             "19:00 HS"
         ];
 
