@@ -52,7 +52,10 @@ const getLastCeremony = async () => {
                 },
                 { show: true }
             ]
-        }
+        },
+        order: [
+            ['date', 'ASC'],
+        ],
     });
     return lastCeremony;
 };
@@ -73,13 +76,16 @@ const getAvailableTimesById = async (payload) => {
     }, {});
 
     const objResponse = JSON.parse(ceremony.timeOptions).map((curr) => {
+       const date = moment(ceremony.date).format("YYYY-MM-DD");
+       
         const obj = {
             time: curr,
             available:
                 (timeRepetitions[curr] !== undefined
                     ? timeRepetitions[curr] < ceremony.numberOfAssistants
-                    : true) && moment(curr, "HH:mm [HS]") > moment().add(1, 'hour')
-        };
+                    : true) && moment(`${date} ${curr}`, "YYYY-MM-DD HH:mm [HS]") > moment().add(1, 'hour')
+       
+                };
         return obj;
     });
 
