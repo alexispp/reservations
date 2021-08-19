@@ -24,11 +24,11 @@ const deleteCeremony = async (ceremonyId) => {
     ceremony.destroy();
 };
 
-const getCeremonies = async () => {
+const getCeremonies = async () => { 
     return await db.ceremony.findAll({
         where: {
             date: {
-                [Op.gt]: moment()
+                [Op.gte]: moment().format("YYYY-MM-DD")
             }
         },
         order: [["date", "ASC"]]
@@ -47,7 +47,7 @@ const getLastCeremony = async () => {
             [Op.and]: [
                 {
                     date: {
-                        [Op.gt]: moment()
+                        [Op.gte]: moment().format("YYYY-MM-DD")
                     }
                 },
                 { show: true }
@@ -73,13 +73,12 @@ const getAvailableTimesById = async (payload) => {
     }, {});
 
     const objResponse = JSON.parse(ceremony.timeOptions).map((curr) => {
-        a = +1;
         const obj = {
             time: curr,
             available:
-                timeRepetitions[curr] !== undefined
+                (timeRepetitions[curr] !== undefined
                     ? timeRepetitions[curr] < ceremony.numberOfAssistants
-                    : true
+                    : true) && moment(curr, "HH:mm [HS]") > moment().add(1, 'hour')
         };
         return obj;
     });
